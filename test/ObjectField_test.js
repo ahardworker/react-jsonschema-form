@@ -218,7 +218,7 @@ describe("ObjectField", () => {
       expect(labels).eql(["baz", "bar", "qux", "foo"]);
     });
 
-    it("should throw when order list contains an extraneous property", () => {
+    it("should use provided order also if order list contains extraneous properties", () => {
       const { node } = createFormComponent({
         schema,
         uiSchema: {
@@ -226,9 +226,12 @@ describe("ObjectField", () => {
         },
       });
 
-      expect(node.querySelector(".config-error").textContent).to.match(
-        /contains extraneous properties 'wut\?', 'huh\?'/
+      const labels = [].map.call(
+        node.querySelectorAll(".field > label"),
+        l => l.textContent
       );
+
+      expect(labels).eql(["baz", "qux", "bar", "foo"]);
     });
 
     it("should throw when order list misses an existing property", () => {
